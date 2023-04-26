@@ -23,7 +23,7 @@ function App() {
     //newToDo:{ id: 1, age: 30, name: "송중기" }
     //newUser를 배열에 더한다(users.length+1).
     const newToDo = {
-      id: toDo.length + 1,
+      id: Date.now(),
       topic,
       content,
     };
@@ -39,21 +39,7 @@ function App() {
     // });
     const newToDo = toDo.filter((user) => user.id !== id);
     setTodo(newToDo);
-  };
-
-  const [done, setToDone] = useState([
-    { id: 1, topic: "리액트 공부하기", content: "리액트 기초를 공부해봅시다." },
-    { id: 2, topic: "리액트 코드짜기", content: "새로운 컴포넌트 만들기" },
-  ]);
-
-  const clickDone = () => {
-    // const moveToDone = {
-    //   id: done.length + 1,
-    //   topic: topic,
-    //   content: content,
-    // };
-    // setToDone([...done, moveToDone]);
-    alert("hi");
+    console.log(newToDo);
   };
 
   const [isDone, setIsDone] = useState(toDo.isDone);
