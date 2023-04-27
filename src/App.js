@@ -18,11 +18,13 @@ function App() {
       id: Date.now(),
       topic: "리액트 공부하기",
       content: "리액트 기초를 공부해봅시다.",
+      status: "Working",
     },
     {
       id: Date.now() + 1,
       topic: "리액트 코드짜기",
       content: "새로운 컴포넌트 만들기",
+      status: "Done",
     },
   ]);
 
@@ -35,7 +37,10 @@ function App() {
       id: Date.now(),
       topic,
       content,
+      status: "Working",
     };
+    setTopic("");
+    setContent("");
     setTodo([...toDo, newToDo]);
     //배열의 불변성 유지를 위해 toDo를 스프레드했다가 newToDo해준 형태로 만든다.
   };
@@ -46,31 +51,13 @@ function App() {
   };
 
   //이동 컴포넌트
-  const [todos, setTodos] = useState([
-    { id: Date.now() + 3, text: "Todo 1", status: "Working" },
-    { id: Date.now() + 4, text: "Todo 2", status: "Done" },
-    { id: Date.now() + 5, text: "Todo 3", status: "Working" },
-  ]);
 
-  // const [toDo, setTodo] = useState([
-  //   {
-  //     id: Date.now(),
-  //     topic: "리액트 공부하기",
-  //     content: "리액트 기초를 공부해봅시다.",
-  //   },
-  //   {
-  //     id: Date.now() + 1,
-  //     topic: "리액트 코드짜기",
-  //     content: "새로운 컴포넌트 만들기",
-  //   },
-  // ]); todos-toDo, setTodos-setTodo
-
-  const workingTodos = todos.filter((todo) => todo.status === "Working");
-  const doneTodos = todos.filter((todo) => todo.status === "Done");
+  const workingTodos = toDo.filter((item) => item.status === "Working");
+  const doneTodos = toDo.filter((item) => item.status === "Done");
 
   const toggleStatus = (id) => {
-    setTodos(
-      todos.map((todo) => {
+    setTodo(
+      toDo.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
@@ -104,7 +91,7 @@ function App() {
           <div>
             <h2>Working...🔥</h2>
             <ul className="app-style">
-              {toDo.map(function (item) {
+              {workingTodos.map(function (item) {
                 return (
                   <div key={item.id} item={item} className="component-style">
                     {item.topic}
@@ -115,14 +102,9 @@ function App() {
                       <button onClick={() => delFunction(item.id)}>삭제</button>
                     </div>
                     <div>
-                      {workingTodos.map((todo) => (
-                        <div key={todo.id}>
-                          {todo.text}
-                          <button onClick={() => toggleStatus(todo.id)}>
-                            완료
-                          </button>
-                        </div>
-                      ))}
+                      <button onClick={() => toggleStatus(item.id)}>
+                        완료
+                      </button>
                     </div>
                   </div>
                 );
@@ -132,7 +114,7 @@ function App() {
           <div>
             <h2>Done...!🎉</h2>
             <div className="app-style">
-              {toDo.map(function (item) {
+              {doneTodos.map(function (item) {
                 return (
                   <div key={item.id} item={item} className="component-style">
                     {item.topic}
@@ -143,14 +125,9 @@ function App() {
                       <button onClick={() => delFunction(item.id)}>삭제</button>
                     </div>
                     <div>
-                      {doneTodos.map((todo) => (
-                        <div key={todo.id}>
-                          {todo.text}
-                          <button onClick={() => toggleStatus(todo.id)}>
-                            취소
-                          </button>
-                        </div>
-                      ))}
+                      <button onClick={() => toggleStatus(item.id)}>
+                        취소
+                      </button>
                     </div>
                   </div>
                 );
