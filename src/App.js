@@ -15,13 +15,13 @@ function App() {
 
   const [toDo, setTodo] = useState([
     {
-      id: Date.now(),
+      id: 1,
       topic: "리액트 공부하기",
       content: "리액트 기초를 공부해봅시다.",
       status: "Working",
     },
     {
-      id: Date.now() + 1,
+      id: 2,
       topic: "리액트 코드짜기",
       content: "새로운 컴포넌트 만들기",
       status: "Done",
@@ -29,10 +29,8 @@ function App() {
   ]);
 
   //추가버튼
-  const clickAddButton = () => {
-    //새로운 형태의 newTodo를 만든다.
-    //newToDo:{ id: 1, age: 30, name: "송중기" }
-    //newUser를 배열에 더한다(users.length+1).
+  const clickAddButton = (e) => {
+    e.preventDefault();
     const newToDo = {
       id: Date.now(),
       topic,
@@ -45,94 +43,111 @@ function App() {
     //배열의 불변성 유지를 위해 toDo를 스프레드했다가 newToDo해준 형태로 만든다.
   };
 
+  //삭제버튼
   const delFunction = (id) => {
-    const newToDo = toDo.filter((user) => user.id !== id);
-    setTodo(newToDo);
+    const delToDo = toDo.filter((user) => user.id !== id);
+    setTodo(delToDo);
   };
 
-  //이동 컴포넌트
-
+  //완료-취소 버튼
   const workingTodos = toDo.filter((item) => item.status === "Working");
   const doneTodos = toDo.filter((item) => item.status === "Done");
 
   const toggleStatus = (id) => {
     setTodo(
-      toDo.map((todo) => {
-        if (todo.id === id) {
+      toDo.map((toDo) => {
+        if (toDo.id === id) {
           return {
-            ...todo,
-            status: todo.status === "Working" ? "Done" : "Working",
+            ...toDo,
+            status: toDo.status === "Working" ? "Done" : "Working",
           };
         } else {
-          return todo;
+          return toDo;
         }
       })
     );
   };
 
   return (
-    <div>
-      <div className="">
+    <div className="layout">
+      <div className="container">
         <div>My Todo List</div>
         <div>React</div>
-        <div className="">
-          <div className="">
-            제목&nbsp;
-            <input value={topic} onChange={onTopicHandler} />
-          </div>
-          <div>
-            내용&nbsp;
-            <input value={content} onChange={onContentHandler} />
-          </div>
-          <button onClick={clickAddButton}>추가하기</button>
+      </div>
+      <form onSubmit={clickAddButton} className="add-form">
+        <div className="input-group">
+          <label className="form-label">제목&nbsp;</label>
+          <input
+            value={topic}
+            onChange={onTopicHandler}
+            className="add-input"
+          />
+          <label className="form-label">내용&nbsp;</label>
+          <input
+            value={content}
+            onChange={onContentHandler}
+            className="add-input"
+          />
         </div>
-        <br />
-        <div>
-          <div>
-            <h2>Working...🔥</h2>
-            <ul className="app-style">
-              {workingTodos.map(function (item) {
-                return (
-                  <div key={item.id} item={item} className="component-style">
-                    {item.topic}
-                    <br />
-                    {item.content}
-                    <br />
-                    <div className="button-set">
-                      <button onClick={() => delFunction(item.id)}>삭제</button>
-                    </div>
-                    <div>
-                      <button onClick={() => toggleStatus(item.id)}>
-                        완료
-                      </button>
-                    </div>
+        <button className="add-button" type="submit">
+          추가하기
+        </button>
+      </form>
+      <div className="list-container">
+        <h2 className="list-title">Working...🔥</h2>
+        <div className="list-wrapper">
+          {workingTodos.map(function (item) {
+            return (
+              <div key={item.id} item={item} className="todo-container">
+                <div>
+                  <h2 className="todo-title">{item.topic}</h2>
+                  <div>{item.content}</div>
+                </div>
+                <div className="button-set">
+                  <button
+                    onClick={() => delFunction(item.id)}
+                    className="todo-delete-button button"
+                  >
+                    삭제
+                  </button>
+                  <button
+                    onClick={() => toggleStatus(item.id)}
+                    className="todo-complete-button button"
+                  >
+                    완료
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="">
+          <h2 className="list-title">Done...!🎉</h2>
+          <div className="list-wrapper">
+            {doneTodos.map(function (item) {
+              return (
+                <div key={item.id} item={item} className="todo-container">
+                  <div>
+                    <h2 className="todo-title">{item.topic}</h2>
+                    <div>{item.content}</div>
                   </div>
-                );
-              })}
-            </ul>
-          </div>
-          <div>
-            <h2>Done...!🎉</h2>
-            <div className="app-style">
-              {doneTodos.map(function (item) {
-                return (
-                  <div key={item.id} item={item} className="component-style">
-                    {item.topic}
-                    <br />
-                    {item.content}
-                    <br />
-                    <div className="button-set">
-                      <button onClick={() => delFunction(item.id)}>삭제</button>
-                    </div>
-                    <div>
-                      <button onClick={() => toggleStatus(item.id)}>
-                        취소
-                      </button>
-                    </div>
+                  <div className="button-set">
+                    <button
+                      onClick={() => delFunction(item.id)}
+                      className="todo-delete-button button"
+                    >
+                      삭제
+                    </button>
+                    <button
+                      onClick={() => toggleStatus(item.id)}
+                      className="todo-complete-button button"
+                    >
+                      취소
+                    </button>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
